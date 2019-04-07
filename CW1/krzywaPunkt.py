@@ -25,23 +25,34 @@ def createElipticCurve(p):
     calcDelta = lambda a, b: (4 * pow(a, 3)) + (27 * pow(b, 2))
     elipticCurve = lambda a, b, x: (pow(x, 3, p) + (a * x) + b) % p
 
+    a = 0
+    b = 0
+    x = 0
     delta = p
-    while (delta % p == 0):
+    while (delta % p == 0 or not quadrTest(elipticCurve(a,b,x), p)):
         a = getRandom(p)
         b = getRandom(p)
         x = getRandom(p)    
         delta = calcDelta(a, b)  
     else:
-        return elipticCurve(a, b, x)
+        return a, b, x
 
 def main():
     p = randomP()
-    print('p: ', p)
+    print(f'p: {p}')
 
-    elipticCurve = 0
-    while(not quadrTest(elipticCurve, p)):
-        elipticCurve = createElipticCurve(p)
-        print(elipticCurve)
+    a, b, x = createElipticCurve(p)
+    elipticCurve = lambda a, b, x: (pow(x, 3, p) + (a * x) + b) % p
+    
+    y = pow(elipticCurve(a, b, x), (p + 1) // 4, p)
+
+    print(f'y: {y}')
+
+    print(f'Punkt: ({x}, {y})\n')
+
+    print(elipticCurve(a, b, x))
+    print(pow(y, 2, p))
+    print(pow(y, 2, p) == elipticCurve(a, b, x))
 
 if __name__ == '__main__':
    main()
