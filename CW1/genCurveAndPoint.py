@@ -1,6 +1,8 @@
  #!/usr/bin/python3
 
 from Crypto.Util import number
+from point import Point, CurveFp
+import sys
 INIT_PRIME_SIZE = 256
 
 def randomP():
@@ -38,6 +40,11 @@ def createElipticCurve(p):
 
 def main():
     p = randomP()
+    n = 20
+
+    if len(sys.argv) > 1:
+        n = int(sys.argv[1])
+
     print(f'p: {p}')
 
     a, b, x = createElipticCurve(p)
@@ -53,6 +60,21 @@ def main():
     print(elipticCurve(a, b, x))
     print(pow(y, 2, p))
     print(pow(y, 2, p) == elipticCurve(a, b, x))
+
+    # multiplying n * p
+    print('\nCalculate nP:')
+
+    print(f'n: {n}')
+    curve = CurveFp(p, a, b)
+    point = Point(curve, x, y)
+
+    nP = point.__mul__(n)
+    print(f'nP: {nP}')
+
+    print('\nTest for correctness:')
+    print(elipticCurve(a, b, nP.x()))
+    print(pow(nP.y(), 2, p))
+    print(pow(nP.y(), 2, p) == elipticCurve(a, b, nP.x()))
 
 if __name__ == '__main__':
    main()
