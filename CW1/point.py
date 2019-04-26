@@ -7,9 +7,7 @@ import numbertheory
 
 @python_2_unicode_compatible
 class CurveFp(object):
-  """Elliptic Curve over the field of integers modulo a prime."""
   def __init__(self, p, a, b):
-    """The curve of points satisfying y^2 = x^3 + a*x + b (mod p)."""
     self.__p = p
     self.__a = a
     self.__b = b
@@ -24,29 +22,24 @@ class CurveFp(object):
     return self.__b
 
   def contains_point(self, x, y):
-    """Is the point (x,y) on this curve?"""
     return (y * y - (x * x * x + self.__a * x + self.__b)) % self.__p == 0
 
   def __str__(self):
     return "CurveFp(p=%d, a=%d, b=%d)" % (self.__p, self.__a, self.__b)
 
 class Point(object):
-  """A point on an elliptic curve. Altering x and y is forbidding,
-     but they can be read by the x() and y() methods."""
   def __init__(self, curve, x, y, order=None):
-    """curve, x, y, order; order (optional) is the order of this point."""
     self.__curve = curve
     self.__x = x
     self.__y = y
     self.__order = order
-    # self.curve is allowed to be None only for INFINITY:
+
     if self.__curve:
       assert self.__curve.contains_point(x, y)
     if order:
       assert self * order == INFINITY
 
   def __eq__(self, other):
-    """Return True if the points are identical, False otherwise."""
     if self.__curve == other.__curve \
        and self.__x == other.__x \
        and self.__y == other.__y:
@@ -55,10 +48,6 @@ class Point(object):
       return False
 
   def __add__(self, other):
-    """Add one point to another point."""
-
-    # X9.62 B.3:
-
     if other == INFINITY:
       return self
     if self == INFINITY:
@@ -81,8 +70,6 @@ class Point(object):
     return Point(self.__curve, x3, y3)
 
   def __mul__(self, other):
-    """Multiply a point by an integer."""
-
     def leftmost_bit(x):
       assert x > 0
       result = 1
@@ -99,27 +86,21 @@ class Point(object):
       return INFINITY
     assert e > 0
 
-    # From X9.62 D.3.2:
-
     e3 = 3 * e
     negative_self = Point(self.__curve, self.__x, -self.__y, self.__order)
     i = leftmost_bit(e3) // 2
     result = self
-    # print_("Multiplying %s by %d (e3 = %d):" % (self, other, e3))
     while i > 1:
       result = result.double()
       if (e3 & i) != 0 and (e & i) == 0:
         result = result + self
       if (e3 & i) == 0 and (e & i) != 0:
         result = result + negative_self
-      # print_(". . . i = %d, result = %s" % ( i, result ))
       i = i // 2
 
     return result
 
   def __rmul__(self, other):
-    """Multiply a point by an integer."""
-
     return self * other
 
   def __str__(self):
@@ -128,12 +109,8 @@ class Point(object):
     return "(%d,%d)" % (self.__x, self.__y)
 
   def double(self):
-    """Return a new point that is twice the old."""
-
     if self == INFINITY:
       return INFINITY
-
-    # X9.62 B.3:
 
     p = self.__curve.p()
     a = self.__curve.a()
@@ -158,6 +135,4 @@ class Point(object):
   def order(self):
     return self.__order
 
-
-# This one point is the Point At Infinity for all purposes:
 INFINITY = Point(None, None, None)
