@@ -88,13 +88,10 @@ class Point(object):
 
     return result
 
-  def __rmul__(self, other):
-    return self * other
-
   def __str__(self):
     if self == INFINITY:
       return "infinity"
-    return "(%d,%d)" % (self.__x, self.__y)
+    return "(%d, %d)" % (self.__x, self.__y)
 
   def double(self):
     if self == INFINITY:

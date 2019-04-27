@@ -38,9 +38,7 @@ def createElipticCurve(p):
     else:
         return a, b, x
     
-def CalcNP(n, p, a, b, x, y):
-    elipticCurve = lambda a, b, x: (pow(x, 3, p) + (a * x) + b) % p
-   
+def CalcNP(n, p, a, b, x, y):   
     # multiplying n * p
     print(f'n: {n}')
     curve = CurveFp(p, a, b)
@@ -50,15 +48,18 @@ def CalcNP(n, p, a, b, x, y):
     print(f'nP: {nP}')
 
     print('\nTest for correctness:')
-    print(elipticCurve(a, b, nP.x()))
+    print(elipticCurve(a, b, nP.x(), p))
     print(pow(nP.y(), 2, p))
-    print(pow(nP.y(), 2, p) == elipticCurve(a, b, nP.x()))
+    print(pow(nP.y(), 2, p) == elipticCurve(a, b, nP.x(), p))
 
     return nP
 
 def CalcSecret(nP, yourSecret):
     commonSecret = nP.__mul__(yourSecret)
     return commonSecret
+
+def elipticCurve(a, b, x, p):
+    return (pow(x, 3, p) + (a * x) + b) % p
 
 def main():
     p = randomP()
@@ -73,19 +74,16 @@ def main():
     print('\nGenerate curve and point: \n')
     print(f'p: {p}')
 
-    a, b, x = createElipticCurve(p)
-    elipticCurve = lambda a, b, x: (pow(x, 3, p) + (a * x) + b) % p
+    a, b, x = createElipticCurve(p)    
+    y = pow(elipticCurve(a, b, x, p), (p + 1) // 4, p)
     
-    y = pow(elipticCurve(a, b, x), (p + 1) // 4, p)
-
     print(f'y: {y}')
-
     print(f'Point: ({x}, {y})')
 
     print('\nTest for correctness:')
-    print(elipticCurve(a, b, x))
+    print(elipticCurve(a, b, x, p))
     print(pow(y, 2, p))
-    print(pow(y, 2, p) == elipticCurve(a, b, x))
+    print(pow(y, 2, p) == elipticCurve(a, b, x, p))
   
     print('---------------------------------------------')
     print('\nAlice nP:')
