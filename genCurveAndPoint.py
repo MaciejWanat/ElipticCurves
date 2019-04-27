@@ -44,7 +44,7 @@ def CalcNP(n, p, a, b, x, y):
     curve = CurveFp(p, a, b)
     point = Point(curve, x, y)
 
-    nP = point.__mul__(n)
+    nP = point.__mul__(point, n)
     print(f'nP: {nP}')
 
     print('\nTest for correctness:')
@@ -55,7 +55,7 @@ def CalcNP(n, p, a, b, x, y):
     return nP
 
 def CalcSecret(nP, yourSecret):
-    commonSecret = nP.__mul__(yourSecret)
+    commonSecret = nP.__mul__(nP, yourSecret)
     return commonSecret
 
 def elipticCurve(a, b, x, p):
@@ -76,7 +76,7 @@ def main():
 
     a, b, x = createElipticCurve(p)    
     y = pow(elipticCurve(a, b, x, p), (p + 1) // 4, p)
-    
+
     print(f'y: {y}')
     print(f'Point: ({x}, {y})')
 
