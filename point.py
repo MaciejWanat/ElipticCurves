@@ -70,7 +70,7 @@ class Point(object):
     assert e > 0
 
     e3 = 3 * e
-    negative_self = Point(self.__curve, self.__x, -self.__y, self.__order)
+    negative_self = Point(self.__curve, self.__x, -self.__y)
     i = leftmost_bit(e3) // 2
     result = self
     while i > 1:
