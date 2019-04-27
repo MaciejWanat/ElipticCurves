@@ -1,11 +1,7 @@
 #! /usr/bin/env python3
 
-from __future__ import division
-
-from six import python_2_unicode_compatible
 import numbertheory
 
-@python_2_unicode_compatible
 class CurveFp(object):
   def __init__(self, p, a, b):
     self.__p = p
@@ -38,14 +34,6 @@ class Point(object):
       assert self.__curve.contains_point(x, y)
     if order:
       assert self * order == INFINITY
-
-  def __eq__(self, other):
-    if self.__curve == other.__curve \
-       and self.__x == other.__x \
-       and self.__y == other.__y:
-      return True
-    else:
-      return False
 
   def __add__(self, other):
     if other == INFINITY:
