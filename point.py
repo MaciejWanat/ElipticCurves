@@ -24,16 +24,13 @@ class CurveFp(object):
     return "CurveFp(p=%d, a=%d, b=%d)" % (self.__p, self.__a, self.__b)
 
 class Point(object):
-  def __init__(self, curve, x, y, order=None):
+  def __init__(self, curve, x, y):
     self.__curve = curve
     self.__x = x
     self.__y = y
-    self.__order = order
 
     if self.__curve:
       assert self.__curve.contains_point(x, y)
-    if order:
-      assert self * order == INFINITY
 
   def __add__(self, other):
     if other == INFINITY:
@@ -66,8 +63,6 @@ class Point(object):
       return result // 2
 
     e = other
-    if self.__order:
-      e = e % self.__order
     if e == 0:
       return INFINITY
     if self == INFINITY:
@@ -116,8 +111,5 @@ class Point(object):
 
   def curve(self):
     return self.__curve
-
-  def order(self):
-    return self.__order
 
 INFINITY = Point(None, None, None)
