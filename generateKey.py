@@ -1,9 +1,9 @@
  #!/usr/bin/python3
 
-from mathHelper import randomP
-from curveHelper import getPointWithCurve, calcNP, calcSecret, elipticCurve
-from point import Point
-from curve import Curve
+from helpers.mathHelper import randomP
+from helpers.curveHelper import getPointWithCurve, calcNP, calcSecret
+from models.point import Point
+from models.curve import Curve
 from Crypto.Util import number
 import sys
 

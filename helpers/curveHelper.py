@@ -1,6 +1,6 @@
 from Crypto.Util import number
-from point import Point
-from curve import Curve
+from models.point import Point
+from models.curve import Curve
 
 def quadrTest(f, p):
     if f == 0:
@@ -27,6 +27,7 @@ def getPointWithCurve(p):
         curve = Curve(p, a, b)
         y = pow(elipticCurve(a, b, x, p), (p + 1) // 4, p)
         point = Point(curve, x, y)
+        
         return point
     
 def calcNP(point, n):   

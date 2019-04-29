@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
-from curve import Curve
-from mathHelper import inverse_mod
+from models import curve
+from helpers.mathHelper import inverse_mod
 
 class Point(object):
   def __init__(self, curve, x, y):
