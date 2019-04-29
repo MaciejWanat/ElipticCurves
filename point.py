@@ -1,27 +1,7 @@
 #! /usr/bin/env python3
 
-import numbertheory
-
-class CurveFp(object):
-  def __init__(self, p, a, b):
-    self.__p = p
-    self.__a = a
-    self.__b = b
-
-  def p(self):
-    return self.__p
-
-  def a(self):
-    return self.__a
-
-  def b(self):
-    return self.__b
-
-  def contains_point(self, x, y):
-    return (y * y - (x * x * x + self.__a * x + self.__b)) % self.__p == 0
-
-  def __str__(self):
-    return "CurveFp(p=%d, a=%d, b=%d)" % (self.__p, self.__a, self.__b)
+from curve import Curve
+from mathHelper import inverse_mod
 
 class Point(object):
   def __init__(self, curve, x, y):
@@ -47,7 +27,7 @@ class Point(object):
     p = self.__curve.p()
 
     l = ((other.__y - self.__y) * \
-         numbertheory.inverse_mod(other.__x - self.__x, p)) % p
+        inverse_mod(other.__x - self.__x, p)) % p
 
     x3 = (l * l - self.__x - other.__x) % p
     y3 = (l * (self.__x - x3) - self.__y) % p
@@ -72,6 +52,11 @@ class Point(object):
       return "infinity"
     return "(%d, %d)" % (self.__x, self.__y)
 
+  def __eq__(self, other):
+    if self.x() == other.x() and self.y() == other.y():
+      return True
+    return False
+
   def double(self):
     if self == INFINITY:
       return INFINITY
@@ -80,7 +65,7 @@ class Point(object):
     a = self.__curve.a()
 
     l = ((3 * self.__x * self.__x + a) * \
-         numbertheory.inverse_mod(2 * self.__y, p)) % p
+        inverse_mod(2 * self.__y, p)) % p
 
     x3 = (l * l - 2 * self.__x) % p
     y3 = (l * (self.__x - x3) - self.__y) % p
