@@ -54,15 +54,18 @@ class Point(object):
 
     return Point(self.__curve, x3, y3)
 
-  def __mul__(self, point, n):
+  def __mul__(self, n, accumulator = False):
+    if not accumulator:
+      accumulator = self
+
     if n == 0:
         return INFINITY
     if n == 1:
-        return point
+        return accumulator
     if n % 2 == 1:
-      return self.__mul__(self.__add__(point), n - 1) # addition when n is odd
+      return self.__mul__(n - 1, self.__add__(accumulator)) # addition when n is odd
 
-    return self.__mul__(point.double(), n/2)   # doubling when n is even
+    return self.__mul__(n/2, accumulator.double())          # doubling when n is even
 
   def __str__(self):
     if self == INFINITY:
