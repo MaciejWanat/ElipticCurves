@@ -37,7 +37,7 @@ def calcNP(point, n):
     curve = point.curve()
     print(f'nP: {nP}')
 
-    if not curve.contains_point(nP.x(), nP.y()):
+    if not curve.containsPoint(nP.x(), nP.y()):
         print('\nError! Point not on the curve!')
 
     return nP

@@ -25,7 +25,7 @@ def main():
     print(f'Curve:', curve)
     print(f'Point: ({point.x()}, {point.y()})')
     
-    if not curve.contains_point(point.x(), point.y()):
+    if not curve.containsPoint(point.x(), point.y()):
         print('\nError! Point not on the curve!')
   
     print('\n> Alice nP:')

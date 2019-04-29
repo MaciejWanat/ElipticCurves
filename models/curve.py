@@ -13,7 +13,7 @@ class Curve(object):
   def b(self):
     return self.__b
 
-  def contains_point(self, x, y):
+  def containsPoint(self, x, y):
     return (y * y - (x * x * x + self.__a * x + self.__b)) % self.__p == 0
 
   def __str__(self):

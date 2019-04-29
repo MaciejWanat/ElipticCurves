@@ -10,7 +10,7 @@ class Point(object):
     self.__y = y
 
     if self.__curve:
-      assert self.__curve.contains_point(x, y)
+      assert self.__curve.containsPoint(x, y)
 
   def __add__(self, other):
     if other == INFINITY:
