@@ -2,33 +2,16 @@ from Crypto.Util import number
 from models.point import Point
 from models.curve import Curve
 
-def quadrTest(f, p):
-    if f == 0:
-        return False
-
-    if(pow(f,((p-1)//2), p) == 1):
-        return True
-    return False
-
 def getPointWithCurve(p):
-    getRandom = lambda p: number.getRandomRange(0, p - 1)
-    calcDelta = lambda a, b: (4 * pow(a, 3)) + (27 * pow(b, 2))
+    curve, x = getRandomCurveAndX(p)
 
-    a = 0
-    b = 0
-    x = 0
-    delta = p
-    while (delta % p == 0 or not quadrTest(elipticCurve(a,b,x,p), p)):
-        a = getRandom(p)
-        b = getRandom(p)
-        x = getRandom(p)    
-        delta = calcDelta(a, b)  
-    else:
-        curve = Curve(p, a, b)
-        y = pow(elipticCurve(a, b, x, p), (p + 1) // 4, p)
-        point = Point(curve, x, y)
-        
-        return point
+    while (curve.delta() % p == 0 or not curve.quadrTest(x)):
+        curve, x = getRandomCurveAndX(p)
+
+    y = curve.calculateY(x)
+    point = Point(curve, x, y)
+    
+    return point
     
 def calcNP(point, n):   
     print(f'n: {n}')
@@ -46,5 +29,14 @@ def calcSecret(nP, yourSecret):
     commonSecret = nP * yourSecret
     return commonSecret
 
-def elipticCurve(a, b, x, p):
-    return (pow(x, 3, p) + (a * x) + b) % p
+def getRandomCurveAndX(p):
+    a = getRandomNumber(p)
+    b = getRandomNumber(p)
+    x = getRandomNumber(p)
+
+    curve = Curve(p, a, b)
+
+    return curve, x
+
+def getRandomNumber(max):
+    return number.getRandomRange(0, max - 1)
